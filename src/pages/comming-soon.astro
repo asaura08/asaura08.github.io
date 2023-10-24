@@ -1,3 +1,8 @@
+---
+import { Image } from "astro:assets";
+import codingGif from "../img/coding.gif";
+---
+
 <!doctype html>
 <html lang="es">
   <head>
@@ -22,7 +27,7 @@
     <title>Proximamente</title>
   </head>
   <body>
-    <section class="bg-white dark:bg-gray-900">
+    <section class="bg-white dark:bg-black h-screen">
       <div
         class="py-8 px-4 mx-auto max-w-screen-md text-center lg:py-16 lg:px-12"
       >
@@ -38,13 +43,18 @@
         <h1
           class="mb-4 text-4xl font-bold tracking-tight leading-none text-gray-900 lg:mb-6 md:text-5xl xl:text-6xl dark:text-white"
         >
-          Under Maintenance
+          En construccion
         </h1>
         <p
           class="font-light text-gray-500 md:text-lg xl:text-xl dark:text-gray-400"
         >
-          Our Enterprise administrators are performing scheduled maintenance.
+          Esta pagina esta en construccion, proximamente estara disponible.
         </p>
+      </div>
+      <div class="flex justify-center w-1/4 mx-auto">
+        <Image src={codingGif} alt="coding" />
+
+        <div></div>
       </div>
     </section>
   </body>
