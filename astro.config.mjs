@@ -8,8 +8,4 @@ export default defineConfig({
   integrations: [tailwind()],
   site: 'https://saura.dev',
   base: '/Portfolio',
-  output: "server",
-  adapter: node({
-    mode: "standalone",
-  }),
 });
