@@ -1,7 +1,3 @@
----
-const pathname = Astro.url.pathname.replace(/\//g, "");
----
-
 <astro-document lang="es">
   <head>
     <title>404 Not found</title>
@@ -20,8 +16,8 @@ const pathname = Astro.url.pathname.replace(/\//g, "");
         </div>
         <div class="text-center mt-10" style="color: #1ff042;">
           <p>
-            The page "{pathname}" that you requested cannot be found right now.
-            Try typing 'go-home'.
+            The page you requested cannot be found right now. Try typing
+            'go-home'.
           </p>
         </div>
       </div>

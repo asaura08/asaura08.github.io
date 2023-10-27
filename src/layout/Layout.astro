@@ -1,14 +1,20 @@
 ---
+import { ViewTransitions } from "astro:transitions";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 interface Props {
   title: string;
+  footer?: boolean | undefined;
+  navbar?: boolean | undefined;
 }
-let removeComponents = false;
 const { title } = Astro.props;
+let { footer, navbar } = Astro.props;
 
-if (Astro.url.pathname === "/comming-soon") {
-  removeComponents = true;
+if (footer != undefined) {
+  footer = true;
+}
+if (navbar != undefined) {
+  navbar = true;
 }
 ---
 
@@ -17,9 +23,10 @@ if (Astro.url.pathname === "/comming-soon") {
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content="Astro description" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    <ViewTransitions />
     <script>
       //check if the user has a dark mode preference
       if (
@@ -36,57 +43,65 @@ if (Astro.url.pathname === "/comming-soon") {
     <title>{title}</title>
   </head>
   <body>
-    {removeComponents ? null : <Navbar />}
-    <slot />
+    {navbar ? null : <Navbar />}
 
-    {removeComponents ? null : <Footer />}
+    <slot class="container" />
+
+    <Footer />
+    <style is:global>
+      html {
+        font-family: system-ui, sans-serif;
+        background: #000000;
+        background-size: 224px;
+      }
+      code {
+        font-family:
+          Menlo,
+          Monaco,
+          Lucida Console,
+          Liberation Mono,
+          DejaVu Sans Mono,
+          Bitstream Vera Sans Mono,
+          Courier New,
+          monospace;
+      }
+
+      ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        background-color: transparent;
+        border-radius: 10px;
+      }
+
+      ::-webkit-scrollbar {
+        width: 10px;
+        background-color: transparent;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: transparent;
+        background-image: -webkit-gradient(
+          linear,
+          left bottom,
+          left top,
+          color-stop(0.44, rgb(122, 122, 122)),
+          color-stop(0.72, rgb(84, 84, 84)),
+          color-stop(0.86, rgb(51, 51, 51))
+        );
+      }
+
+      *,
+      *:focus,
+      *:hover {
+        outline: none;
+      }
+      html,
+      body {
+        min-height: 100%;
+      }
+      body {
+        height: 100vh;
+      }
+    </style>
   </body>
 </html>
-<style is:global>
-  html {
-    font-family: system-ui, sans-serif;
-    background: #000000;
-    background-size: 224px;
-  }
-  code {
-    font-family:
-      Menlo,
-      Monaco,
-      Lucida Console,
-      Liberation Mono,
-      DejaVu Sans Mono,
-      Bitstream Vera Sans Mono,
-      Courier New,
-      monospace;
-  }
-
-  ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: transparent;
-    border-radius: 10px;
-  }
-
-  ::-webkit-scrollbar {
-    width: 10px;
-    background-color: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background-color: transparent;
-    background-image: -webkit-gradient(
-      linear,
-      left bottom,
-      left top,
-      color-stop(0.44, rgb(122, 122, 122)),
-      color-stop(0.72, rgb(84, 84, 84)),
-      color-stop(0.86, rgb(51, 51, 51))
-    );
-  }
-
-  *,
-  *:focus,
-  *:hover {
-    outline: none;
-  }
-</style>
