@@ -1,6 +1,5 @@
 ---
-import { Image } from "astro:assets";
-import codingGif from "../img/coding.gif";
+import codingGif from "@img/coding.gif";
 ---
 
 <!doctype html>
@@ -52,8 +51,7 @@ import codingGif from "../img/coding.gif";
         </p>
       </div>
       <div class="flex justify-center w-1/4 mx-auto">
-        <Image src={codingGif} alt="coding" />
-
+        <img src={codingGif.src} alt="coding" />
         <div></div>
       </div>
     </section>
