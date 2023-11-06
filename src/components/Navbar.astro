@@ -2,16 +2,17 @@
 import Button from "../components/ui/buttons/Button.astro";
 ---
 
-<header class="shadow fixed top-0 inset-x-0 z-50 bg-blur-lg">
-  <nav class="relative px-4 py-4 flex justify-between items-center">
+<header class="shadow top-0 inset-x-0 z-50 bg-blur-lg">
+  <nav class="px-4 py-4 flex justify-between items-center">
     <a href="/" class="flex items-center"
-      ><img src="icon.svg" class="mr-3 h-6 sm:h-9" alt="WEB-ON Logo" />
+      ><img src="favicon-96.png" class="mr-3 h-6 sm:h-9" alt="WEB-ON Logo" />
     </a>
 
     <div class="lg:hidden">
       <button
         type="button"
-        class="navbar-burger focus:outline-none whitespace-normal m-0.5 rounded-lg focus:ring-2 p-1.5 ml-3 lg:hidden focus:ring-primary-500 focus:ring-offset-primary-200 focus:ring-offset-2"
+        class="navbar-burger focus:outline-none whitespace-normal m-0.5 rounded-lg focus:ring-2 p-1.5 ml-3 lg:hidden focus:ring-primary-500 z-1 focus:ring-offset-primary-200 focus:ring-offset-2"
+        onclick="this.classList.toggle('open');const menu = document.querySelector('.navbar-menu');menu.classList.toggle('hidden');"
         aria-label="Open main menu"
         ><span class="sr-only">Open main menu</span>
         <svg
@@ -20,7 +21,7 @@ import Button from "../components/ui/buttons/Button.astro";
           tabindex="0"
           width="24"
           height="24"
-          class="h-6 w-6 shrink-0"
+          class="h-6 w-6 shrink-0 z-50"
           aria-label="bars 3"
           fill="none"
           viewBox="0 0 24 24"
@@ -29,13 +30,15 @@ import Button from "../components/ui/buttons/Button.astro";
             stroke="#fff"
             stroke-linecap="round"
             stroke-linejoin="round"
+            class="z-50"
             d="M4 6h16M4 12h16M4 18h16"></path>
         </svg></button
       >
     </div>
 
     <ul
-      class="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:mx-auto lg:flex lg:items-center lg:w-auto lg:space-x-6">
+      class="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:mx-auto lg:flex lg:items-center lg:w-auto lg:space-x-6"
+    >
       <li>
         <a
           href="/"
@@ -45,65 +48,66 @@ import Button from "../components/ui/buttons/Button.astro";
       </li>
       <li>
         <a
-          href="/about"
+          href="/dev"
           class="block py-2 pr-4 pl-3 md:p-0 rounded text-white hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700 dark:text-white md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-          >About</a
+          >Dev</a
         >
       </li>
       <li>
         <a
-          href="/services"
+          href="/sec"
           class="block py-2 pr-4 pl-3 md:p-0 rounded text-white hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700 dark:text-white md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-          >Services</a
+          >Sec</a
         >
       </li>
       <li>
         <a
-          href="/pricing"
+          href="/ops"
           class="block py-2 pr-4 pl-3 md:p-0 rounded text-white hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700 dark:text-white md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-          >Pricing</a
+          >Ops</a
         >
       </li>
       <li>
         <a
-          href="/developers"
+          href="/blog"
           class="block py-2 pr-4 pl-3 md:p-0 rounded text-white hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700 dark:text-white md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-          >Developers</a
+          >Blog</a
         >
       </li>
     </ul>
-    <div class="hidden lg:block space-x-2">
+    <!-- <div class="hidden lg:block space-x-2">
       <Button text="Iniciar sesion" link="/login" />
       <Button text="Registrarse" link="/signup" />
-    </div>
+    </div> -->
   </nav>
   <div class="navbar-menu relative z-50 hidden">
     <nav
-      class="navbar-nav space-y-4 lg:flex lg:flex-col lg:space-y-8 lg:space-x-0 lg:items-baseline">
+      class="navbar-nav space-y-4 lg:flex lg:flex-col lg:space-y-8 lg:space-x-0 lg:items-baseline"
+    >
       <a
         href="/"
         class="block py-2 pr-4 pl-3 md:p-0 rounded md:border-0 text-white bg-primary-700 md:bg-transparent md:text-primary-700 md:dark:text-white dark:bg-primary-600 md:dark:bg-transparent dark:text-white"
         >Home</a
       >
       <a
-        href="/about"
+        href="/dev"
         class="block py-2 pr-4 pl-3 md:p-0 rounded text-white hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700 dark:text-white md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-        >About</a
+        >Dev</a
       >
       <a
-        href="/services"
+        href="/sec"
         class="block py-2 pr-4 pl-3 md:p-0 rounded text-white hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700 dark:text-white md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-        >Services</a
+        >Sec</a
       >
       <a
-        href="/pricing"
+        href="/ops"
         class="block py-2 pr-4 pl-3 md:p-0 rounded text-white hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700 dark:text-white md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-        >Pricing</a
+        >Ops</a
       >
       <a
-        href="/contact"
+        href="/blog"
         class="block py-2 pr-4 pl-3 md:p-0 rounded text-white hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700 dark:text-white md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-        >Contact</a
+        >Blog</a
       >
     </nav>
     <div class="lg:ml-auto space-x-2">
@@ -111,52 +115,11 @@ import Button from "../components/ui/buttons/Button.astro";
       <Button text="Registrarse" link="/signup" />
     </div>
   </div>
-  <script>
-    // Burger menus
-    document.addEventListener("DOMContentLoaded", function () {
-      // open
-      const burger = document.querySelectorAll(".navbar-burger");
-      const menu = document.querySelectorAll(".navbar-menu");
-
-      if (burger.length && menu.length) {
-        for (var i = 0; i < burger.length; i++) {
-          burger[i].addEventListener("click", function () {
-            for (var j = 0; j < menu.length; j++) {
-              menu[j].classList.toggle("hidden");
-            }
-          });
-        }
-      }
-
-      // close
-      const close = document.querySelectorAll(".navbar-close");
-      const backdrop = document.querySelectorAll(".navbar-backdrop");
-
-      if (close.length) {
-        for (var i = 0; i < close.length; i++) {
-          close[i].addEventListener("click", function () {
-            for (var j = 0; j < menu.length; j++) {
-              menu[j].classList.toggle("hidden");
-            }
-          });
-        }
-      }
-
-      if (backdrop.length) {
-        for (var i = 0; i < backdrop.length; i++) {
-          backdrop[i].addEventListener("click", function () {
-            for (var j = 0; j < menu.length; j++) {
-              menu[j].classList.toggle("hidden");
-            }
-          });
-        }
-      }
-    });
-  </script>
 </header>
 <style>
   header {
     background-color: rgba(0, 0, 0, 0.475);
     backdrop-filter: saturate(100%) blur(5px);
+    position: sticky;
   }
 </style>

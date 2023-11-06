@@ -1,0 +1,14 @@
+---
+import Layout from "src/layout/Layout.astro";
+
+if (process.env.NODE_ENV !== "development") {
+  return Astro.redirect("/comming-soon", 302);
+}
+---
+
+<Layout title="Blog">
+  <section class="text-white text-center">
+    <h1>Blog</h1>
+    <p>Coming soon...</p>
+  </section>
+</Layout>

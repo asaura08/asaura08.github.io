@@ -24,9 +24,8 @@ if (navbar != undefined) {
     <meta charset="UTF-8" />
     <meta name="description" content="Astro description" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon-96.png" />
     <meta name="generator" content={Astro.generator} />
-    <ViewTransitions />
     <script>
       //check if the user has a dark mode preference
       if (
@@ -41,13 +40,14 @@ if (navbar != undefined) {
       }
     </script>
     <title>{title}</title>
+    <ViewTransitions />
   </head>
   <body>
     {navbar ? null : <Navbar />}
 
-    <slot class="container" />
+    <slot />
 
-    <Footer />
+    {footer ? null : <Footer />}
     <style is:global>
       html {
         font-family: system-ui, sans-serif;
