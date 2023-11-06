@@ -1,0 +1,119 @@
+---
+import Layout from "../layout/Layout.astro";
+---
+
+<Layout title="Saura DevSecOps " navbar={false}>
+  <div
+    class="hover-slide flex w-full h-screen text-center justify-center align-middle font-semibold text-10xl"
+  >
+    <a href="/dev" id="dev" class="text-white h-screen pt-36">
+      <h1>Dev</h1>
+    </a>
+    <a href="/sec" id="sec" class="text-white h-screen pt-36 video-container">
+      <h1>Sec</h1>
+    </a>
+    <a href="/ops" id="ops" class="text-white h-screen pt-36">
+      <h1>Ops</h1>
+    </a>
+  </div>
+</Layout>
+
+<style>
+  body {
+    -webkit-transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    overflow: hidden;
+    -webkit-perspective: 1000;
+  }
+
+  .hover-slide > a {
+    min-width: calc(100% / 3);
+    cursor: pointer;
+    transition: 0.75s;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .hover-slide > a:hover {
+    min-width: 80%;
+  }
+
+  .hover-slide > a:not(:hover) {
+    min-width: calc(10% / 3);
+  }
+
+  #dev {
+    background-image: url("/coding-background.jpg");
+    background-size: cover;
+  }
+
+  #dev:hover {
+    background-image: url("/coding-background.gif");
+    background-position: right;
+    background-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0.2)
+      ),
+      url("/coding-background.gif");
+
+    font-size: 12rem;
+    trasition: 0.75s;
+  }
+
+  #sec {
+    background-image: url("/security-background.jpg");
+    background-size: cover;
+    trasition: 0.75s;
+  }
+
+  #sec:hover {
+    background-image: url("/sec-background.gif");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    trasition: 0.75s;
+    font-size: 12rem;
+  }
+
+  #ops {
+    background-image: url("/ops-background.jpg");
+    background-size: cover;
+  }
+
+  #ops:hover {
+    background-image: url("/ops-background.gif");
+    background-size: cover;
+    trasition: 0.75s;
+    font-size: 12rem;
+  }
+</style>
+<script>
+  const dev = document.getElementById("dev");
+  const sec = document.getElementById("sec");
+  const ops = document.getElementById("ops");
+
+  dev.addEventListener("mouseover", () => {
+    dev.textContent = "Development";
+  });
+
+  dev.addEventListener("mouseout", () => {
+    dev.textContent = "Dev";
+  });
+
+  sec.addEventListener("mouseover", () => {
+    sec.textContent = "Security";
+  });
+
+  sec.addEventListener("mouseout", () => {
+    sec.textContent = "Sec";
+  });
+
+  ops.addEventListener("mouseover", () => {
+    ops.textContent = "Operations";
+  });
+
+  ops.addEventListener("mouseout", () => {
+    ops.textContent = "Ops";
+  });
+</script>

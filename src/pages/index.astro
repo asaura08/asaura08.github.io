@@ -1,66 +1,201 @@
 ---
 import Layout from "../layout/Layout.astro";
+import coding from "@assets/videos/dev-background.webm";
+import sec from "@assets/videos/sec-background.webm";
+import ops from "@assets/videos/ops-background.webm";
+import secPoster from "@assets/images/secPoster.png";
 ---
 
 <Layout title="Saura DevSecOps " navbar={false}>
-  <div
-    id="welcome"
-    class="w-full h-screen bg-black flex justify-center items-center"
-  >
-    <h1 class="text-9xl text-center text-white font-semibold">
-      Welcome to Saura Dev
-    </h1>
-  </div>
-  <div
-    id="main"
-    class="gradient flex w-full h-screen text-center place-items-center font-bold text-10xl"
-  >
-    <a href="/dev" id="dev" class="w-1/3">
-      <h1 class="text-white">Dev</h1>
-    </a>
-    <a href="/sec" id="sec" class="w-1/3">
-      <h1 class="text-white">Sec</h1>
-    </a>
-    <a href="/ops" id="ops" class="w-1/3">
-      <h1 class="text-white">Ops</h1>
-    </a>
+  <div class="flex w-full font-semibold text-10xl h-screen">
+    <div class="video-container h-screen">
+      <video id="dev-video" muted loop src={coding}></video>
+      <a
+        href="/dev"
+        onmouseover="document.getElementById('dev-video').play();"
+        onmouseout="document.getElementById('dev-video').load();"
+        id="dev"></a>
+    </div>
+    <div class="video-container">
+      <video id="sec-video" muted loop poster={secPoster.src} src={sec}></video>
+      <a
+        href="/sec"
+        onmouseover="document.getElementById('sec-video').play();"
+        onmouseout="document.getElementById('sec-video').load();"
+        id="sec"></a>
+    </div>
+    <div class="video-container">
+      <video id="ops-video" muted loop src={ops}></video>
+      <a
+        href="/ops"
+        onmouseover="document.getElementById('ops-video').play();"
+        onmouseout="document.getElementById('ops-video').load();"
+        id="ops"></a>
+    </div>
   </div>
 </Layout>
+
 <style>
   body {
-    margin: 0;
+    overflow: hidden;
   }
-  .gradient {
-    animation: animateBg 10s linear infinite;
-    color: linear-gradient(
-      0deg,
-      #cf5c5c,
-      #c19b4a,
-      #def2a0,
-      #c6ee4a,
-      #42eca6,
-      #64b3d9,
-      #208ea2,
-      #498ada,
-      #5b73df,
-      #897ed3,
-      #cf5c5c,
-      #c19b4a
-    );
-    background-size: 100% 1100%;
-    height: 100vh;
-    width: 100vw;
+
+  .video-container {
+    width: calc(100% / 3);
+    position: relative;
+    overflow: hidden;
+    color: white;
+    min-width: 10%;
+    transition: 0.75s;
   }
-  @keyframes animateBg {
-    0% {
-      background-position: 0% 0%;
+
+  .video-container video {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    object-fit: cover;
+    z-index: 0;
+  }
+
+  /* Just styling the content of the div, the *magic* in the previous rules */
+  .video-container > a {
+    z-index: 1;
+    position: relative;
+    font-size: 18rem;
+    min-height: 100%;
+    display: flex;
+  }
+
+  .video-container:hover {
+    min-width: 74%;
+  }
+  .video-container > a:hover {
+    justify-content: center;
+  }
+
+  .video-container:not(:hover) {
+    min-width: 13%;
+  }
+
+  #dev:not(:hover)::before {
+    content: "Dev";
+  }
+
+  #dev:hover::before {
+    animation: dev-text 2s linear forwards;
+    display: block;
+    content: "Dev";
+    font-size: 11rem;
+  }
+
+  #sec:not(:hover)::before {
+    content: "Sec";
+    padding: 0 2rem;
+  }
+
+  #ops:not(:hover)::before {
+    content: "Ops";
+  }
+
+  #sec:hover::before {
+    content: "Sec";
+    font-size: 10rem;
+    animation: sec-text 2s linear forwards;
+  }
+
+  #ops:hover::before {
+    content: "Ops";
+    font-size: 10rem;
+    animation: ops-text 2s linear forwards;
+  }
+
+  @keyframes dev-text {
+    26% {
+      content: "Dev";
+    }
+    30% {
+      content: "Deve";
+    }
+    36% {
+      content: "Devel";
+    }
+    42% {
+      content: "Develo";
+    }
+    48% {
+      content: "Develop";
+    }
+    54% {
+      content: "Developm";
+    }
+    60% {
+      content: "Developme";
+    }
+    66% {
+      content: "Developmen";
+    }
+    72% {
+      content: "Development";
     }
     100% {
-      background-position: 0% 100%;
+      content: "Development";
+    }
+  }
+
+  @keyframes sec-text {
+    26% {
+      content: "Sec";
+    }
+    30% {
+      content: "Secu";
+    }
+    36% {
+      content: "Secur";
+    }
+    42% {
+      content: "Securi";
+    }
+    48% {
+      content: "Securit";
+    }
+    54% {
+      content: "Security";
+    }
+    100% {
+      content: "Security";
+    }
+  }
+
+  @keyframes ops-text {
+    26% {
+      content: "Ops";
+    }
+    30% {
+      content: "Ope";
+    }
+    36% {
+      content: "Oper";
+    }
+    42% {
+      content: "Opera";
+    }
+    48% {
+      content: "Operat";
+    }
+    54% {
+      content: "Operati";
+    }
+    60% {
+      content: "Operatio";
+    }
+    66% {
+      content: "Operation";
+    }
+    72% {
+      content: "Operations";
+    }
+    100% {
+      content: "Operations";
     }
   }
 </style>
-<script>
-  const welcomeDiv = document.getElementById("welcome");
-  const mainDiv = document.getElementById("main");
-</script>
