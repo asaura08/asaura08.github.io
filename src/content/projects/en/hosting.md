@@ -1,9 +1,9 @@
 ---
 title: "SaaS Hosting Platform and Automated Provisioning"
 shortTitle: "SaaS hosting and provisioning"
-summary: "I adapted Frappe Press and Agent to deploy applications from a self-service panel. The platform went into production and served a paying customer."
+summary: "I adapted Frappe Press and Agent to deploy applications from a self-service panel. The platform went into production and served some paying customers."
 feature:
-  signal: "1 paying customer"
+  signal: "Customers in production"
   context: "Production Frappe hosting during my time at MetaZenIT."
   figureTitle: "From site creation to a working domain"
   caption: "Press coordinated the request. Agent provisioned the remote environment. The proxy, DNS and TLS made the application reachable."
