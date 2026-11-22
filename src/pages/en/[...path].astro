@@ -1,0 +1,12 @@
+---
+import Site from "../../components/Site.astro";
+import { pages, segment } from "../../data/site";
+export function getStaticPaths() {
+  return pages.map((id) => ({
+    params: { path: segment(id, "en") || undefined },
+    props: { id },
+  }));
+}
+---
+
+<Site lang="en" id={Astro.props.id} />

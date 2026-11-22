@@ -1,0 +1,112 @@
+---
+import HostingAssembly from './diagram/HostingAssembly.astro';
+import GaleraCluster from './diagram/GaleraCluster.astro';
+import ProcessFlow from './diagram/ProcessFlow.astro';
+
+interface Props {
+  kind: 'hosting' | 'galera' | 'gitops' | 'invoices' | 'clinic';
+  lang: 'es' | 'en';
+  mode?: 'hero' | 'full' | 'thumb';
+  uid: string;
+}
+const { kind, lang, mode = 'full', uid } = Astro.props;
+const prefix = `system-${uid.replace(/[^a-zA-Z0-9_-]/g, '-')}`;
+const compact = mode === 'thumb';
+const titles = {
+  hosting: { es: 'Aprovisionamiento de aplicaciones Frappe', en: 'Provisioning Frappe applications' },
+  galera: { es: 'Clúster MariaDB Galera de tres nodos', en: 'Three-node MariaDB Galera cluster' },
+  gitops: { es: 'Promoción y despliegue con GitOps', en: 'Promotion and deployment with GitOps' },
+  invoices: { es: 'Del mensaje de correo al gasto con su PDF', en: 'From email to an expense with its PDF' },
+  clinic: { es: 'Autorización de operaciones en la agenda clínica', en: 'Authorizing clinic scheduling operations' },
+};
+const descriptions = {
+  hosting: {
+    es: 'Desde el panel de Frappe Press se solicita un despliegue. Frappe Agent ejecuta las operaciones de aprovisionamiento para los entornos Docker de las aplicaciones.',
+    en: 'A deployment starts in the Frappe Press control panel. Frappe Agent carries out provisioning operations on the Docker environments that host the applications.',
+  },
+  galera: {
+    es: 'Las aplicaciones Frappe se conectan a MaxScale, que dirige las conexiones a tres nodos MariaDB. Galera replica los datos entre los nodos del clúster desplegado en Kubernetes, con almacenamiento persistente Longhorn.',
+    en: 'Frappe applications connect to MaxScale, which routes connections to three MariaDB nodes. Galera replicates data across the nodes running on Kubernetes with persistent Longhorn storage.',
+  },
+  gitops: {
+    es: 'GitHub Actions participa en la integración continua, Kargo promueve los cambios y Git conserva el estado deseado. Argo CD reconcilia ese estado con K3s. Prometheus recoge las métricas del clúster.',
+    en: 'GitHub Actions runs continuous integration, Kargo promotes changes and Git holds the desired state. Argo CD reconciles that state with K3s. Prometheus collects cluster metrics.',
+  },
+  invoices: {
+    es: 'Un proceso IMAP lee el correo de Stalwart y procesa el mensaje. A través de la API de Invoice Ninja se crea un gasto con el PDF adjunto.',
+    en: 'An IMAP worker reads incoming Stalwart mail and processes the message. The Invoice Ninja API creates an expense with the PDF attached.',
+  },
+  clinic: {
+    es: 'El paciente usa el portal de citas y el personal dispone de un panel de gestión. Al recibir una petición, el servidor comprueba los permisos del rol antes de ejecutar la operación sobre la agenda.',
+    en: 'Patients use a booking portal and clinic staff use a management dashboard. When a request arrives, the server checks role permissions before acting on the schedule.',
+  },
+};
+---
+
+<div class="system-diagram" data-diagram={kind} data-diagram-mode={mode}>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox={kind === 'hosting' ? '0 0 560 352' : '0 0 560 326'}
+    role="img" aria-labelledby={`${prefix}-title`} aria-describedby={`${prefix}-description`}>
+    <title id={`${prefix}-title`}>{titles[kind][lang]}</title>
+    <desc id={`${prefix}-description`}>{descriptions[kind][lang]}</desc>
+    <defs>
+      <radialGradient id={`${prefix}-aura`}>
+        <stop stop-color="#4d9378" stop-opacity=".23" />
+        <stop offset=".52" stop-color="#305d51" stop-opacity=".14" />
+        <stop offset="1" stop-color="#264d47" stop-opacity="0" />
+      </radialGradient>
+      <linearGradient id={`${prefix}-press-face`} x1="0" x2="1" y1="0" y2=".7">
+        <stop stop-color="#2b5649" /><stop offset=".56" stop-color="#23483e" /><stop offset="1" stop-color="#1c3633" />
+      </linearGradient>
+      <linearGradient id={`${prefix}-agent-face`} x1="0" x2="1" y1="0" y2=".8">
+        <stop stop-color="#2d4545" /><stop offset=".57" stop-color="#243b3c" /><stop offset="1" stop-color="#182f32" />
+      </linearGradient>
+      <linearGradient id={`${prefix}-docker-face`} x1="0" x2="1" y1="0" y2=".65">
+        <stop stop-color="#2b4840" /><stop offset=".58" stop-color="#263f38" /><stop offset="1" stop-color="#182e2d" />
+      </linearGradient>
+      <linearGradient id={`${prefix}-cylinder`}>
+        <stop stop-color="#263b38" /><stop offset=".24" stop-color="#3b5d51" /><stop offset=".58" stop-color="#2b4b43" /><stop offset="1" stop-color="#152b2b" />
+      </linearGradient>
+      <radialGradient id={`${prefix}-grid-fade`}>
+        <stop offset=".14" stop-color="white" /><stop offset=".65" stop-color="#aaa" /><stop offset="1" stop-color="black" />
+      </radialGradient>
+      <mask id={`${prefix}-grid-mask`}>
+        <ellipse cx={kind === 'hosting' && !compact ? 215 : 280} cy="210" rx="295" ry="163" fill={`url(#${prefix}-grid-fade)`} />
+      </mask>
+      <pattern id={`${prefix}-mesh`} patternUnits="userSpaceOnUse" width="52" height="24">
+        <path d="m0 12 26-12 26 12-26 12Z" fill="none" stroke="#55786b" stroke-width=".66" />
+      </pattern>
+      <marker id={`${prefix}-arrow`} viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="m1 1 5.5 3L1 7" fill="none" stroke="#b2e4ce" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.15" />
+      </marker>
+    </defs>
+    <rect x="0" y="0" width="560" height="352" opacity={kind === 'hosting' ? '.57' : '.31'}
+      fill={`url(#${prefix}-mesh)`} mask={`url(#${prefix}-grid-mask)`} />
+    {kind === 'hosting' ? <HostingAssembly {prefix} {lang} {compact} />
+      : kind === 'galera' ? <GaleraCluster {prefix} {lang} {compact} />
+      : <ProcessFlow {kind} {prefix} {lang} {compact} />}
+  </svg>
+</div>
+
+<style>
+  .system-diagram {
+    container-type: inline-size;
+    width: 100%;
+    min-width: 0;
+    line-height: 0;
+  }
+  .system-diagram > svg { display: block; width: 100%; height: auto; }
+  .system-diagram :global(.sd-label),
+  .system-diagram :global(.sd-node-label text),
+  .system-diagram :global(.sd-flow-name) {
+    font: 500 17px/1 'IBM Plex Mono', ui-monospace, monospace;
+    letter-spacing: -.045em;
+  }
+  .system-diagram :global(.sd-node-label text) { text-anchor: middle; fill: #d0e2d9; }
+  .system-diagram :global(.sd-caption) { font: 400 14px/1 'Instrument Sans', system-ui, sans-serif; fill: #b1c4bb; }
+  @container (max-width: 435px) {
+    .system-diagram :global(.sd-label),
+    .system-diagram :global(.sd-node-label text),
+    .system-diagram :global(.sd-flow-name) { font-size: 20px; }
+    .system-diagram :global(.sd-caption) { display: none; }
+  }
+</style>

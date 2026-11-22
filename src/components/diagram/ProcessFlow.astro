@@ -1,0 +1,88 @@
+---
+type Flow = 'gitops' | 'invoices' | 'clinic';
+type Term = readonly [es: string, en: string];
+interface Props { kind: Flow; prefix: string; lang: 'es' | 'en'; compact: boolean; }
+interface Station {
+  x: number;
+  y: number;
+  icon: keyof typeof glyphs;
+  name: Term;
+  detail: Term;
+}
+const { kind, prefix, lang, compact } = Astro.props;
+const language = lang === 'es' ? 0 : 1;
+const glyphs = {
+  ci: 'M-13-9h26V9h-26Z M-13-4h26 M-7-6.5h.3m3 0h.3 M-6 2l3 3 7-7',
+  promote: 'M-14 7h9V1h9v-7h9 M4-12l9 6-9 6 M-14 12h12',
+  git: 'M-7-6a3 3 0 1 0 0-6 3 3 0 1 0 0 6Zm0 18a3 3 0 1 0 0-6 3 3 0 1 0 0 6Zm14-13a3 3 0 1 0 0-6 3 3 0 1 0 0 6ZM-7-6V6 M-7 4c0-6 14-2 14-11',
+  reconcile: 'M-10-2a10 10 0 0 1 18-5 M9-13v7H2 M10 2A10 10 0 0 1-8 7 M-9 13V6h7',
+  cluster: 'M0-13 7-9v8L0 3-7-1v-8ZM-8 0l6 4v7l-6 3-6-3V4Zm16 0 6 4v7l-6 3-6-3V4Z',
+  metrics: 'M-13-10v20h27 M-10 5l5-5 4 3 7-10 5 3',
+  mail: 'M-14-9h28V9h-28Z M-13-8 0 2 13-8 M-13 8l8-7 M13 8 5 1',
+  worker: 'M-13-9h26V9h-26Z M-8-3l4 3-4 3 M0 4h7',
+  api: 'M-6-7l-7 7 7 7 M6-7l7 7-7 7 M3-10l-6 20',
+  receipt: 'M-11-13H5l6 6v20l-4-2-4 2-4-2-4 2-6-2Z M5-13v7h6 M-6-3h8 M-6 2H4 M-6 7h5',
+  portal: 'M-13-10h26v20h-26Z M-13-4h26 M-7-7h.1m3 0h.1 M-3 1h6m-3-3v6',
+  panel: 'M-12-9h24V9h-24Z M-6-4v8 M-2-4h8 M-2 0h8 M-2 4h5',
+  access: 'M0-13c3 3 8 4 12 4v6c0 8-5 13-12 16-7-3-12-8-12-16v-6c4 0 9-1 12-4ZM-5-1l4 4 7-8',
+  schedule: 'M-12-8h24v20h-24Z M-12-2h24 M-6-13v8m12-8v8 M-5 4h3m4 0h3m-10 4h3',
+};
+
+const stations: Record<Flow, Station[]> = {
+  gitops: [
+    { x: 92, y: 76, icon: 'ci', name: ['GitHub Actions', 'GitHub Actions'], detail: ['Integración continua', 'Continuous integration'] },
+    { x: 280, y: 76, icon: 'promote', name: ['Kargo', 'Kargo'], detail: ['Promoción de cambios', 'Change promotion'] },
+    { x: 468, y: 76, icon: 'git', name: ['Git', 'Git'], detail: ['Estado deseado', 'Desired state'] },
+    { x: 468, y: 221, icon: 'reconcile', name: ['Argo CD', 'Argo CD'], detail: ['Reconciliación', 'Reconciliation'] },
+    { x: 280, y: 221, icon: 'cluster', name: ['K3s', 'K3s'], detail: ['Cargas de trabajo', 'Workloads'] },
+    { x: 92, y: 221, icon: 'metrics', name: ['Prometheus', 'Prometheus'], detail: ['Métricas del clúster', 'Cluster metrics'] },
+  ],
+  invoices: [
+    { x: 140, y: 76, icon: 'mail', name: ['Stalwart', 'Stalwart'], detail: ['Entrada de correo', 'Incoming mail'] },
+    { x: 414, y: 76, icon: 'worker', name: ['Worker IMAP', 'IMAP worker'], detail: ['Procesamiento del mensaje', 'Message processing'] },
+    { x: 414, y: 221, icon: 'api', name: ['Invoice Ninja', 'Invoice Ninja'], detail: ['Llamada a la API', 'API request'] },
+    { x: 140, y: 221, icon: 'receipt', name: ['Gasto registrado', 'Expense recorded'], detail: ['PDF adjunto', 'PDF attached'] },
+  ],
+  clinic: [
+    { x: 90, y: 73, icon: 'portal', name: ['Portal de citas', 'Booking portal'], detail: ['Paciente', 'Patient'] },
+    { x: 90, y: 221, icon: 'panel', name: ['Panel clínico', 'Clinic dashboard'], detail: ['Personal de la clínica', 'Clinic staff'] },
+    { x: 280, y: 146, icon: 'access', name: ['API · RBAC', 'API · RBAC'], detail: ['Permisos en servidor', 'Server-side checks'] },
+    { x: 462, y: 146, icon: 'schedule', name: ['Agenda clínica', 'Clinic schedule'], detail: ['Citas y pacientes', 'Visits and patients'] },
+  ],
+};
+
+const paths: Record<Flow, string[]> = {
+  gitops: [
+    'M126 76H243', 'M314 76H431', 'M502 76h14l13 13v119l-13 13h-12',
+    'M434 221H317', 'M246 221H129',
+  ],
+  invoices: [
+    'M174 76H377', 'M448 76h56l14 14v117l-14 14h-54', 'M380 221H177',
+  ],
+  clinic: [
+    'M124 73h47l33 33v18l22 22h17', 'M124 221h47l33-33v-20l22-22h17',
+    'M314 146H425',
+  ],
+};
+---
+
+<g>
+  <ellipse cx="280" cy="175" rx="235" ry="117" fill={`url(#${prefix}-aura)`} />
+  <g fill="none" stroke="#80bba8" stroke-width="1.5" stroke-linejoin="round">
+    {paths[kind].map((d) => <path d={d} marker-end={`url(#${prefix}-arrow)`} />)}
+  </g>
+  {stations[kind].map(({ x, y, icon, name, detail }) => (
+    <g transform={`translate(${x} ${y})`}>
+      <g stroke-linejoin="round">
+        <path d="M-32-13l13-12h38l13 12v28L19 28h-38l-13-13Z"
+          fill="#132a2b" stroke="#47756b" stroke-width="1.1" />
+        <path d="M-32-17l13-12h38l13 12v26L19 22h-38l-13-13Z"
+          fill={`url(#${prefix}-agent-face)`} stroke="#89b9a8" stroke-width="1.15" />
+        <path d="M-26-14l10-9h31" fill="none" stroke="#567d71" stroke-width=".7" />
+        <path d={glyphs[icon]} fill="none" stroke="#b0e7cd" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" />
+      </g>
+      <text y="52" text-anchor="middle" class="sd-flow-name" fill="#dae9e2">{name[language]}</text>
+      {!compact && <text y="72" text-anchor="middle" class="sd-caption">{detail[language]}</text>}
+    </g>
+  ))}
+</g>

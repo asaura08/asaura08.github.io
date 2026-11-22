@@ -1,0 +1,55 @@
+---
+import IsometricPlate from './IsometricPlate.astro';
+
+interface Props {
+  prefix: string;
+  lang: 'es' | 'en';
+  compact: boolean;
+}
+const { prefix, lang, compact } = Astro.props;
+const labels = [
+  { name: 'Frappe Press', sub: { es: 'Panel de control', en: 'Control plane' }, y: 65, source: [298, 84], color: '#92eccb' },
+  { name: 'Frappe Agent', sub: { es: 'Agente de despliegue', en: 'Deployment agent' }, y: 153, source: [307, 167], color: '#b0c9c6' },
+  { name: 'Docker', sub: { es: 'Entornos de aplicaciones', en: 'Application environments' }, y: 241, source: [324, 250], color: '#9ed7bc' },
+];
+---
+
+<g transform={compact ? 'translate(62 0)' : undefined}>
+  <g aria-hidden="true">
+    <ellipse cx="215" cy="246" rx="182" ry="93" fill={`url(#${prefix}-aura)`} />
+    <g fill="none" stroke-linejoin="round">
+      <path d="m64 266 151-69 153 69-153 69Z" stroke="#476b63" stroke-width=".9" stroke-dasharray="4 5" />
+      <path d="m89 266 126-57 127 57-127 56Z" stroke="#3c635a" stroke-width=".7" />
+      <path d="M215 23v310 M77 90v190 M350 90v184" stroke="#51776c" stroke-width=".7" stroke-dasharray="2 6" opacity=".65" />
+      <path d="m58 89 157-69 145 64 M52 181l164-74 143 65" stroke="#54786f" stroke-width=".65" stroke-dasharray="4 7" opacity=".5" />
+    </g>
+    <g transform="translate(215 261)">
+      <IsometricPlate kind="docker" prefix={prefix} />
+    </g>
+    <g fill="none" stroke="#90c7ac" stroke-width=".85">
+      <path d="M165 186v54 M215 217v49 M266 185v49" stroke-dasharray="2 4" />
+      <ellipse cx="215" cy="251" rx="3.8" ry="1.9" />
+    </g>
+    <g transform="translate(215 170)">
+      <IsometricPlate kind="agent" prefix={prefix} />
+    </g>
+    <g fill="none" stroke="#a0d9bf" stroke-width=".9">
+      <path d="M172 102v52 M215 126v46 M259 103v48" stroke-dasharray="2 4" />
+      <ellipse cx="215" cy="153" rx="4.1" ry="1.9" />
+    </g>
+    <g transform="translate(215 81)">
+      <IsometricPlate kind="press" prefix={prefix} />
+    </g>
+  </g>
+
+  {!compact && labels.map(({ name, sub, y, source, color }) => (
+    <g>
+      <path d={`M${source[0]} ${source[1]} L${source[0] + 12} ${source[1]} L${source[0] + 30} ${y} H373`}
+        fill="none" stroke={color} stroke-opacity=".8" stroke-width="1" />
+      <circle cx={source[0]} cy={source[1]} r="2.5" fill="#0d171a" stroke={color} stroke-width="1.1" />
+      <path d={`M373 ${y-2.6} v5.2`} stroke={color} stroke-width="1" />
+      <text x="385" y={y + 4} class="sd-label" fill={color}>{name}</text>
+      <text x="385" y={y + 24} class="sd-caption">{sub[lang]}</text>
+    </g>
+  ))}
+</g>

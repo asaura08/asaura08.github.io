@@ -1,0 +1,54 @@
+---
+interface Props {
+  prefix: string;
+  lang: 'es' | 'en';
+  compact: boolean;
+}
+const { prefix, lang, compact } = Astro.props;
+const centers = [113, 280, 447];
+const nodes = ['A', 'B', 'C'];
+---
+
+<g>
+  <ellipse cx="280" cy="210" rx="241" ry="97" fill={`url(#${prefix}-aura)`} />
+  <g stroke-linejoin="round" fill="none">
+    <path d="m45 209 62-28h344l63 28-64 28H108Z" fill="#132526" stroke="#375a53" />
+    <path d="m45 209 63 28h342l64-28v5l-64 29H108l-63-29Z" fill="#102022" stroke="#375a53" />
+    <path d="M196 53 H316" stroke="#89cbb3" stroke-width="1.45" marker-end={`url(#${prefix}-arrow)`} />
+    <path d="M366 72 V101 H113 V146 M366 101 H447 V146 M280 101 V146"
+      stroke="#86c9af" stroke-width="1.35" />
+    {centers.map(x => <path d={`M${x - 3.5} 142 l3.5 5 3.5-5`} stroke="#a5e2c8" stroke-width="1.45" />)}
+    <path d="M137 181 H423" stroke="#a9bebb" stroke-width="1.6" stroke-dasharray="3 5" />
+    <circle cx="280" cy="101" r="2.4" fill="#a2d9c3" stroke="none" />
+  </g>
+  <g class="sd-node-label">
+    <path d="m104 39 9-5h70l10 6v25l-10 6h-70l-9-6Z" fill="#172a2b" stroke="#52746e" />
+    <text x="148" y="58">Frappe</text>
+    <path d="m318 39 9-5h78l10 6v25l-10 6h-78l-9-6Z" fill="#17302e" stroke="#78ab99" />
+    <text x="366" y="58" fill="#b6efd6">MaxScale</text>
+  </g>
+
+  {centers.map((cx, index) => (
+    <g transform={`translate(${cx} 187)`} stroke-linejoin="round">
+      <path d="m-55 19 55-23 55 23-55 24Z" fill="#223d38" stroke="#7dada1" stroke-width="1" />
+      <path d="m-55 19 55 24 55-24v5L0 48l-55-24Z" fill="#132724" stroke="#63877c" stroke-width=".8" />
+      <g stroke="#93c3b2" stroke-width="1.1">
+        <path d="M-30-28v35c0 6.9 13.5 12.5 30 12.5S30 13.9 30 7v-35Z" fill={`url(#${prefix}-cylinder)`} />
+        <path d="M-30-15c0 6.9 13.5 12.5 30 12.5S30-8.1 30-15 M-30-3c0 6.9 13.5 12.5 30 12.5S30 3.9 30-3"
+          fill="none" stroke-opacity=".65" />
+        <ellipse cy="-28" rx="30" ry="12.5" fill="#30564b" />
+        <ellipse cy="-28" rx="22.5" ry="8.7" fill="none" opacity=".6" stroke-width=".8" />
+      </g>
+      <circle cx="-17" cy="7" r="1.3" fill="#bcf4d4" />
+      <circle cx="-12.5" cy="8.8" r="1.1" fill="#77a99a" />
+      <text text-anchor="middle" y="72" class="sd-label" fill="#d5e4de">{lang === 'es' ? 'Nodo' : 'Node'} {nodes[index]}</text>
+    </g>
+  ))}
+
+  {!compact && (
+    <g text-anchor="middle">
+      <path d="M74 279 H486" fill="none" stroke="#426059" stroke-width=".75" stroke-dasharray="3 5" />
+      <text x="280" y="302" class="sd-label" fill="#a8d8c4">Galera · Kubernetes · Longhorn</text>
+    </g>
+  )}
+</g>

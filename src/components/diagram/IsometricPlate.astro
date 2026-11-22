@@ -1,0 +1,115 @@
+---
+interface Props {
+  kind: 'press' | 'agent' | 'docker';
+  prefix: string;
+}
+
+const { kind, prefix } = Astro.props;
+const dimensions = {
+  press: { halfWidth: 102, halfHeight: 45, thickness: 9, outline: '#8ee5c9' },
+  agent: { halfWidth: 114, halfHeight: 51, thickness: 12, outline: '#83aaa8' },
+  docker: { halfWidth: 126, halfHeight: 56, thickness: 14, outline: '#6aa99a' },
+};
+const { halfWidth, halfHeight, thickness, outline } = dimensions[kind];
+const sx = halfWidth / 100;
+const sy = halfHeight / 100;
+function point(u: number, v: number, height = 0) {
+  return `${((u - v) * sx).toFixed(2)},${((u + v - 100) * sy - height).toFixed(2)}`;
+}
+function plane(height = 0) {
+  return `matrix(${sx} ${sy} ${-sx} ${sy} 0 ${-halfHeight - height})`;
+}
+const perimeter = [[7, 0], [93, 0], [100, 7], [100, 93], [93, 100], [7, 100], [0, 93], [0, 7]];
+const top = perimeter.map(([u, v]) => point(u, v)).join(' ');
+const front = perimeter.slice(1, 7);
+const sideColors = ['#254941', '#142b2c', '#29473f', '#243a38', '#30483f'];
+const blocks = kind === 'docker'
+  ? [20, 43, 66].map((u) => ({ u, v: 30, w: 16, d: 44, h: 13 }))
+  : [{ u: 31, v: 31, w: 38, d: 38, h: kind === 'press' ? 9 : 6 }];
+---
+
+<g stroke-linejoin="round" stroke-linecap="round">
+  {front.slice(0, -1).map(([u, v], index) => {
+    const [u2, v2] = front[index + 1];
+    return <polygon
+      points={[point(u, v), point(u2, v2), point(u2, v2, -thickness), point(u, v, -thickness)].join(' ')}
+      fill={sideColors[index]} stroke={outline} stroke-width=".8" />;
+  })}
+  <polygon points={top} fill={`url(#${prefix}-${kind}-face)`} stroke={outline} stroke-width="1.35" />
+
+  <g transform={plane()} fill="none" stroke={outline} stroke-width=".9">
+    <path d="M12 6 H88 L94 12 V88 L88 94 H12 L6 88 V12 Z" opacity=".52" />
+    {[[13, 13], [87, 13], [13, 87], [87, 87]].map(([x, y]) => (
+      <g>
+        <circle cx={x} cy={y} r="2.25" fill="#132729" stroke-width="1.1" />
+        <path d={`M${x - 1} ${y + .35} l2 -.7`} />
+      </g>
+    ))}
+    {kind !== 'docker' && (
+      <g>
+        {[0, 1, 2, 3].map((rotation) => (
+          <g transform={`rotate(${rotation * 90} 50 50)`}>
+            <path d="M33 30 V24 L26 17 V10 M40 30 V21 L36 17 V12 M48 30 V18 L52 14 V9" opacity=".7" />
+            <path d="M56 30 V20 H64 L70 14 H81" opacity=".58" />
+            <circle cx="81" cy="14" r="1.35" />
+            <rect x="34" y="26" width="4" height="3" fill={outline} stroke="none" opacity=".67" />
+            <rect x="58" y="12" width="7" height="2" fill={outline} stroke="none" opacity=".67" />
+          </g>
+        ))}
+      </g>
+    )}
+    {kind === 'docker' && (
+      <g>
+        <path d="M12 23 H77 L85 31 H89 M12 79 H74 L80 85 H88 M12 82 H72 L80 90" opacity=".76" />
+        <path d="M18 19 H53 M26 16 H63" opacity=".5" />
+        {[24, 47, 70].map((x) => <path d={`M${x} 78 v-7 M${x + 3} 78 v-7`} />)}
+      </g>
+    )}
+  </g>
+
+  {blocks.map(({ u, v, w, d, h }) => (
+    <g>
+      <polygon points={[point(u, v + d, h), point(u + w, v + d, h), point(u + w, v + d), point(u, v + d)].join(' ')}
+        fill="#2c4c45" stroke={outline} stroke-width=".9" />
+      <polygon points={[point(u + w, v, h), point(u + w, v + d, h), point(u + w, v + d), point(u + w, v)].join(' ')}
+        fill="#142b2c" stroke={outline} stroke-width=".9" />
+      <g transform={plane(h)} stroke={outline} fill="none">
+        <rect x={u} y={v} width={w} height={d} fill={kind === 'agent' ? '#344e50' : '#31594e'} stroke-width="1.4" />
+        {kind === 'press' && (
+          <g stroke="#a1f2d2" stroke-width="1.8">
+            <rect x="34" y="34" width="32" height="32" stroke-width=".7" opacity=".8" />
+            <path d="M43 44 h13 v7 m-13-7 v13 h7 m0-6 h6" />
+            <rect x="40.5" y="41.5" width="5" height="5" fill="#294a43" />
+            <rect x="53.5" y="48.5" width="5" height="5" fill="#294a43" />
+            <rect x="47.5" y="54.5" width="5" height="5" fill="#294a43" />
+          </g>
+        )}
+        {kind === 'agent' && (
+          <g stroke="#c2dcda" stroke-width="2">
+            <rect x="35" y="35" width="30" height="30" stroke-width=".7" opacity=".8" />
+            <path d="m42 44 6 6-6 6 m10 0 h8" />
+          </g>
+        )}
+        {kind === 'docker' && (
+          <g stroke="#9bc8b7" stroke-width="1">
+            {[6, 12, 18, 24, 30, 36].map((offset) => (
+              <path d={`M${u + 3} ${v + offset} h${w - 6}`} />
+            ))}
+          </g>
+        )}
+      </g>
+    </g>
+  ))}
+
+  <g transform={`matrix(${sx} ${sy} 0 1 ${-halfWidth} 0)`}>
+    <path d={`M11 ${thickness - 2} H91`} fill="none" stroke={outline} stroke-width=".55" opacity=".7" />
+    {[18, 22, 26, 30, 34].map((x) => <path d={`M${x} 2.6 v${thickness * .43}`} stroke="#0b1c20" stroke-width="1.85" />)}
+    <rect x="55" y="2.7" width="12" height={thickness * .43} rx=".8" fill="#102323" stroke={outline} stroke-width=".6" />
+    <circle cx="77" cy={thickness * .46} r="1.4" fill={kind === 'agent' ? '#9bb9b8' : '#99f6c9'} />
+    <circle cx="82" cy={thickness * .46} r="1.25" fill="#688d83" />
+  </g>
+  <g transform={`matrix(${sx} ${-sy} 0 1 0 ${halfHeight})`} fill="none" stroke={outline}>
+    <path d={`M12 ${thickness - 2} H86`} stroke-width=".55" opacity=".48" />
+    {[60, 64, 68, 72, 76].map((x) => <path d={`M${x} 3 v${thickness * .4}`} opacity=".7" stroke-width=".8" />)}
+  </g>
+</g>

@@ -1,47 +1,9 @@
-# Astro Starter Kit: Minimal
+# Portfolio de Alfonso
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Portfolio bilingüe en Astro 7 con contenido estático en español e inglés.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
+Con Node 24, ejecuta `npm ci` y `npm run dev`. Para comprobar tipos y construir la versión de producción, usa `npm run check` y `npm run build`. Puedes revisar la compilación con `npm run preview`.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Los textos se editan en `src/content/projects/es` y `src/content/projects/en`. Cada caso necesita el mismo identificador en ambos idiomas. Las categorías, los datos de contacto y las referencias públicas se mantienen en `src/data/site.ts`.
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+El workflow de GitHub Pages construye la rama principal usando el dominio y la ruta base de Pages. En una compilación local se pueden configurar con `PAGES_SITE` y `PAGES_BASE`.

@@ -1,0 +1,529 @@
+---
+import { getCollection, render } from "astro:content";
+import { getRelativeLocaleUrl, getAbsoluteLocaleUrl } from "astro:i18n";
+import {
+  projectStatus,
+  ids,
+  areas,
+  categories,
+  stack,
+  github,
+  linkedin,
+  htbLabs,
+  cwesCertificate,
+  prs,
+  sections,
+  navigation,
+  segment,
+  type Lang,
+} from "../data/site";
+import CaseOverview from "./CaseOverview.astro";
+import SystemDiagram from "./SystemDiagram.astro";
+import "../main.css";
+interface Props {
+  lang: Lang;
+  id: string;
+}
+const { lang, id } = Astro.props;
+const es = lang === "es";
+const t = (a: string, b: string) => (es ? a : b);
+const url = (key: string, l: Lang = lang) =>
+  getRelativeLocaleUrl(l, segment(key, l));
+const absolute = (l: Lang) => getAbsoluteLocaleUrl(l, segment(id, l));
+const all = await getCollection("projects");
+const projects = ids.map((key, index) => {
+  const pair = all.filter(
+    (entry) => entry.id === "es/" + key || entry.id === "en/" + key,
+  );
+  const entry = pair.find((entry) => entry.id === lang + "/" + key);
+  if (!entry || pair.length !== 2) throw Error("Missing translation: " + key);
+  return { key, index, entry, ...entry.data };
+});
+const current = projects.find((p) => p.key === id);
+const rendered = current ? await render(current.entry) : null;
+const Content = rendered?.Content;
+const labels = navigation[lang];
+const name = current?.title ?? labels[sections.indexOf(id)];
+const title =
+  id === "home"
+    ? "Alfonso · Software Engineer | Backend, Platform & Security"
+    : name + " · Alfonso";
+const bio = t(
+  "Soy ingeniero de software especializado en backend, infraestructura y seguridad. He construido plataformas SaaS, operado sistemas de producción y contribuido a proyectos open source. Trabajo en todo el ciclo técnico: desde la arquitectura y el código hasta el despliegue, la observabilidad y la seguridad.",
+  "I’m a software engineer specializing in backend, infrastructure and security. I’ve built SaaS platforms, operated production systems and contributed to open source. My work spans architecture, code, deployment, observability and security.",
+);
+const desc =
+  current?.summary ??
+  (id === "home"
+    ? bio
+    : t(
+        "Explora mi experiencia en ingeniería de software, infraestructura y seguridad.",
+        "Explore my experience in software engineering, infrastructure and security.",
+      ));
+const fig = t(
+  "Representación simplificada de arquitectura",
+  "Simplified architecture diagram",
+);
+const kind =
+  id === "hosting" || id === "galera" || id === "gitops" || id === "invoices"
+    ? id
+    : id === "clinics"
+      ? "clinic"
+      : undefined;
+const metrics = [
+  [
+    "7+",
+    t("PR fusionadas", "Merged pull requests"),
+    t("Open source · nov. 2026", "Open source · Nov 2026"),
+  ],
+  [
+    "7",
+    t("Servidores administrados", "Servers managed"),
+    t("Máximo en infraestructura propia", "Peak across my infrastructure"),
+  ],
+  [
+    "3",
+    t("Nodos MariaDB Galera", "MariaDB Galera nodes"),
+    t("Clúster de alta disponibilidad", "High-availability cluster"),
+  ],
+  [
+    "< 1 min",
+    t("Recuperación observada", "Observed recovery"),
+    t("Pruebas de failover y restauración", "Failover and restore tests"),
+  ],
+];
+const art = (n: number) =>
+  n === 0 ? "hosting" : n === 1 ? "galera" : undefined;
+const contact = t("Contactar", "Get in touch");
+const linkProof: Record<string, string> = {
+  elk: github + "/elk-suricata",
+  dns: github + "/dnsfuzzer",
+};
+const proofIndex: Record<string, number[]> = {
+  hosting: [0, 2],
+  gitops: [1],
+  mail: [5, 6],
+};
+const displayPR =
+  id === "open-source" ? prs : id === "home" ? [prs[3], prs[0], prs[6]] : [];
+const fromBase = (file: string) =>
+  import.meta.env.BASE_URL.replace(/\/$/, "") + "/" + file;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#0b1013" />
+    <title>{title}</title>
+    <meta name="description" content={desc} />
+    <link rel="icon" href={fromBase("favicon.svg")} />
+    <link rel="canonical" href={absolute(lang)} />
+    {(["es", "en"] as const).map((l) => (
+      <link rel="alternate" hreflang={l} href={absolute(l)} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={absolute("es")} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content={absolute(lang)} />
+    <meta property="og:type" content={current ? "article" : "website"} />
+    <meta property="og:locale" content={es ? "es_ES" : "en_US"} />
+    <meta
+      property="og:image"
+      content={new URL(fromBase("social-" + lang + ".png"), Astro.site).href}
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": current ? "CreativeWork" : "WebPage",
+        name: title,
+        url: absolute(lang),
+        inLanguage: lang,
+        author: {
+          "@type": "Person",
+          name: "Alfonso",
+          jobTitle: "Software Engineer",
+          sameAs: [github, linkedin, htbLabs],
+          hasCredential: { "@type": "EducationalOccupationalCredential", name: "Hack The Box Certified Web Exploitation Specialist (CWES)", url: cwesCertificate },
+        },
+      })}
+    />
+  </head>
+  <body>
+    <a class="skip" href="#main">
+      {t("Saltar al contenido", "Skip to content")}
+    </a>
+    <header>
+      <div class="wrap bar">
+        <a class="brand" href={url("home")}>
+          <img width="32" height="32" src={fromBase("favicon.svg")} alt="" />
+          Alfonso<span>.</span>
+        </a>
+        <nav aria-label={t("Principal", "Main")}>
+          {sections.map((s, i) => (
+            <a aria-current={s === id ? "page" : undefined} href={s === "contact" ? linkedin : url(s)}>
+              {labels[i]}
+            </a>
+          ))}
+        </nav>
+        <div class="langs" aria-label={t("Idioma", "Language")}>
+          {(["es", "en"] as const).map((l) => (
+            <a
+              href={url(id, l)}
+              lang={l}
+              hreflang={l}
+              aria-current={l === lang ? "true" : undefined}
+              aria-label={l === "es" ? "Español" : "English"}
+            >
+              {l.toUpperCase()}
+            </a>
+          ))}
+        </div>
+      </div>
+    </header>
+    <main id="main" class="wrap">
+      {id === "home" && (
+        <>
+          <section class="hero">
+            <div>
+              <p class="eyebrow">
+                <i /> Backend / Platform / Security
+              </p>
+              <h1>
+                {t("Construyo software.", "I build software.")}
+                <br />
+                {t("Diseño sistemas.", "I design systems.")}
+                <br />
+                <em>
+                  {t(
+                    "Resuelvo problemas complejos.",
+                    "I solve complex problems.",
+                  )}
+                </em>
+              </h1>
+              <p class="bio">{bio}</p>
+              <div class="actions">
+                <a class="btn primary" href={url("projects")}>
+                  {t("Explorar proyectos", "Explore projects")}
+                </a>
+                <a class="btn" href={github}>
+                  {t("Ver GitHub", "View GitHub")}
+                </a>
+                <a class="textlink" href={linkedin}>
+                  {contact}
+                </a>
+              </div>
+            </div>
+            <figure class="panel">
+              <div class="platehead">
+                <span class="square" />{" "}
+                {t("Arquitectura de hosting", "Hosting architecture")}{" "}
+                <b>FRAPPE</b>
+              </div>
+              <SystemDiagram
+                kind="hosting"
+                {lang}
+                mode="hero"
+                uid="home-stack"
+              />
+              <figcaption>{fig}</figcaption>
+            </figure>
+          </section>
+          <div class="metrics">
+            {metrics.map(([v, n, d]) => (
+              <div>
+                <strong>{v}</strong>
+                <b>{n}</b>
+                <small>{d}</small>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+      {(id === "home" || id === "projects") && (
+        <section class="block">
+          <div class="heading">
+            <div>
+              <p class="eyebrow">
+                {t("Portfolio de ingeniería", "Engineering portfolio")}
+              </p>
+              {id === "home" ? (
+                <h2>{t("Proyectos destacados", "Selected projects")}</h2>
+              ) : (
+                <h1>{labels[1]}</h1>
+              )}
+            </div>
+            {id === "home" && (
+              <a class="textlink" href={url("projects")}>
+                {t("Ver todos los proyectos", "View all projects")}
+              </a>
+            )}
+          </div>
+          {id === "projects" && (
+            <div
+              class="filters"
+              aria-label={t("Filtrar por disciplina", "Filter by discipline")}
+              hidden
+            >
+              {[t("Todos", "All"), ...areas].map((a, i) => (
+                <button
+                  type="button"
+                  data-filter={i - 1}
+                  aria-pressed={i === 0}
+                >
+                  {a}
+                </button>
+              ))}
+            </div>
+          )}
+          <div class="cards">
+            {(id === "home" ? projects.slice(0, 2) : projects).map((p) => (
+              <article class="card" data-areas={categories[p.index].join(" ")}>
+                {art(p.index) && (
+                  <a class="cardart" href={url(p.key)} aria-label={p.title}>
+                    <SystemDiagram
+                      kind={p.index === 0 ? "hosting" : "galera"}
+                      {lang}
+                      mode="thumb"
+                      uid={"card-" + p.key}
+                    />
+                  </a>
+                )}
+                <div class="cardbody">
+                  <p class="eyebrow">{areas[categories[p.index][0]]}</p>
+                  <h3>
+                    <a href={url(p.key)}>{p.shortTitle}</a>
+                  </h3>
+                  {p.feature ? <div class="card-result"><strong>{p.feature.signal}</strong><p>{p.feature.context}</p></div> : <p>{p.summary}</p>}
+                  <a class="textlink" href={url(p.key)}>
+                    {t("Ver caso", "Read case study")}
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+      {current && (
+        <>
+          <section class="intro">
+            <a class="textlink" href={url("projects")}>
+              {labels[1]}
+            </a>
+            <p class="eyebrow">
+              {categories[current.index].map((a) => areas[a]).join(" / ")}
+            </p>
+            <h1>{current.title}</h1>
+            <p class="lead">{current.summary}</p>
+          </section>
+          {current.feature && <CaseOverview {id} {lang} {kind} feature={current.feature}/>}
+          {kind && !current.feature && (
+            <figure class="panel casefig">
+              <SystemDiagram {kind} {lang} mode="full" uid={"detail-" + id} />
+              <figcaption>{fig}</figcaption>
+            </figure>
+          )}
+          <div class="reading">
+            {current.feature ? <details class="case-details"><summary>{t("Leer el estudio técnico completo", "Read the full technical study")}</summary><article class="prose">{Content && <Content />}</article></details> : <article class="prose">{Content && <Content />}</article>}
+            <aside>
+              <p class="eyebrow">
+                {t("Estado del proyecto", "Project status")}
+              </p>
+              <p class="status">{projectStatus[id][es ? 0 : 1]}</p>
+              <h3>{t("Áreas y tecnologías", "Areas and technologies")}</h3>
+              <p>{stack[current.index]}</p>
+              {linkProof[id] && (
+                <a class="textlink" href={linkProof[id]}>
+                  GitHub
+                </a>
+              )}
+              {proofIndex[id]?.map((i) => (
+                <p>
+                  <a
+                    class="textlink"
+                    href={
+                      "https://github.com/frappe/" +
+                      prs[i][0] +
+                      "/pull/" +
+                      prs[i][1]
+                    }
+                  >
+                    frappe/{prs[i][0]} #{prs[i][1]}
+                  </a>
+                </p>
+              ))}
+            </aside>
+          </div>
+        </>
+      )}
+      {displayPR.length > 0 && (
+        <section class="block">
+          <div class="heading">
+            <div>
+              <p class="eyebrow">Open Source</p>
+              <h2>
+                {t("Código incorporado upstream", "Code merged upstream")}
+              </h2>
+            </div>
+            {id === "home" && (
+              <a class="textlink" href={url("open-source")}>
+                {t("Ver las 7 contribuciones", "View all 7 contributions")}
+              </a>
+            )}
+          </div>
+          <div class="prs">
+            {displayPR.map((p) => (
+              <a href={"https://github.com/frappe/" + p[0] + "/pull/" + p[1]}>
+                <small>
+                  frappe/{p[0]} · #{p[1]}
+                </small>
+                <h3>{es ? p[2] : p[3]}</h3>
+                <p>{es ? p[4] : p[5]}</p>
+                <b>⑂ Merged</b>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+      {id === "home" && (
+        <section class="block">
+          <p class="eyebrow">
+            {t("Experiencia aplicada", "Applied experience")}
+          </p>
+          <h2>
+            {t(
+              "Plataforma, producto y seguridad",
+              "Platform, product and security",
+            )}
+          </h2>
+          <div class="disciplines">
+            {projects.slice(3, 6).map((p) => (
+              <a href={url(p.key)}>
+                <strong>{p.shortTitle}</strong>
+                <small>{p.summary}</small>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+      {(id === "about" || id === "home") && (
+        <section class="block">
+          <p class="eyebrow">{t("Trayectoria", "Experience")}</p>
+          {id === "about" ? (
+            <h1>{labels[3]}</h1>
+          ) : (
+            <h2>
+              {t("Ingeniería de extremo a extremo", "End-to-end engineering")}
+            </h2>
+          )}
+          <p class="lead">
+            {t(
+              "Soy Alfonso, fundador y responsable técnico de MetaZenIT. Durante aproximadamente dos años construí aplicaciones y operé la infraestructura que necesitaban para funcionar.",
+              "I’m Alfonso, founder and technical lead of MetaZenIT. For roughly two years I built applications and operated the infrastructure they needed to run.",
+            )}
+          </p>
+          <div class="disciplines">
+            {[
+              ["Backend & Product", "clinics"],
+              ["Infrastructure & Platform", "gitops"],
+              ["Product Security", "disclosure"],
+              ["Automation & Integrations", "invoices"],
+            ].map(([n, k]) => (
+              <a href={url(k)}>
+                <strong>{n}</strong>
+                <small>{projects.find((p) => p.key === k)?.shortTitle}</small>
+              </a>
+            ))}
+          </div>
+          {id === "about" && (
+            <div class="prose">
+              <h2>{t("Cómo trabajo", "How I work")}</h2>
+              <p>
+                {t(
+                  "Me interesa qué ocurre después de desplegar. Investigar fallos en producción me llevó a leer el código de Frappe Press y Agent, mantener adaptaciones y proponer correcciones a sus proyectos originales.",
+                  "I care about what happens after deployment. Investigating production failures led me to read Frappe Press and Agent source code, maintain adaptations and contribute fixes upstream.",
+                )}
+              </p>
+              <h2>{t("Certificación", "Certification")}</h2>
+              <h3>Hack The Box Certified Web Exploitation Specialist (CWES)</h3>
+              <p>
+                {t(
+                  "Especialización en seguridad de aplicaciones web.",
+                  "Specialization in web application security.",
+                )}
+              </p>
+              <a class="textlink" href={cwesCertificate}>
+                {t("Ver certificado CWES", "View CWES certificate")}
+              </a>
+              <h2>{t("Práctica en HTB Labs", "Hands-on practice in HTB Labs")}</h2>
+              <p>
+                {t(
+                  "Practico seguridad resolviendo laboratorios en Hack The Box.",
+                  "I practise security skills by working through Hack The Box labs.",
+                )}
+              </p>
+              <a class="textlink" href={htbLabs}>
+                {t("Ver mi perfil de HTB Labs", "View my HTB Labs profile")}
+              </a>
+            </div>
+          )}
+        </section>
+      )}
+      {id === "home" && (
+        <section class="block contact">
+          <p class="eyebrow">{contact}</p>
+          <h2>{t("Hablemos.", "Let’s talk.")}</h2>
+          <p>
+            {t(
+              "Para incorporaciones a equipos de ingeniería y proyectos técnicos B2B.",
+              "For engineering roles and technical B2B collaborations.",
+            )}
+          </p>
+          <div class="actions">
+            <a class="btn primary" href={linkedin}>
+              {t("Contactar en LinkedIn", "Get in touch on LinkedIn")}
+            </a>
+          </div>
+        </section>
+      )}
+    </main>
+    <footer>
+      <div class="wrap bar">
+        <a class="brand" href={url("home")}>
+          Alfonso<span>.</span>
+        </a>
+        <small>Software Engineer</small>
+        <a href={github}>GitHub</a>
+        <a href={linkedin}>{contact}</a>
+      </div>
+    </footer>
+    <script>
+      const filters = document.querySelector<HTMLElement>(".filters");
+      if (filters) {
+        filters.hidden = false;
+        filters.addEventListener("click", (event) => {
+          const button = (event.target as Element).closest<HTMLButtonElement>(
+            "button",
+          );
+          if (!button) return;
+          const value = button.dataset.filter;
+          filters
+            .querySelectorAll("button")
+            .forEach((b) =>
+              b.setAttribute("aria-pressed", String(b === button)),
+            );
+          document
+            .querySelectorAll<HTMLElement>("[data-areas]")
+            .forEach((card) => {
+              card.hidden =
+                value !== "-1" &&
+                !card.dataset.areas?.split(" ").includes(value ?? "");
+            });
+        });
+      }
+    </script>
+  </body>
+</html>

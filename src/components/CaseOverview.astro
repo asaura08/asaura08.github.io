@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { Lang } from '../data/site';
+import { prs } from '../data/site';
+import SystemDiagram from './SystemDiagram.astro';
+interface Props {
+  id: string;
+  lang: Lang;
+  feature: NonNullable<CollectionEntry<'projects'>['data']['feature']>;
+  kind?: 'hosting'|'galera'|'gitops'|'invoices'|'clinic';
+}
+const {id,lang,feature,kind}=Astro.props;
+const es=lang==='es';
+const proof=id==='hosting'?prs[2]:id==='open-source'?prs[3]:undefined;
+---
+<section class="case-overview" aria-label={es?'El caso en breve':'Case overview'}>
+  <div class="case-result"><strong>{feature.signal}</strong><p>{feature.context}</p></div>
+  <div class="case-evidence">
+    <figure class="panel">
+      <h2>{feature.figureTitle}</h2>
+      {kind ? <SystemDiagram {kind} {lang} mode="full" uid={'detail-'+id}/> : id==='open-source' ?
+        <div class="field-change"><p><span>{es?'Campo anterior':'Previous field'}</span><code>last_synced_at</code></p><p><span>{es?'Campo corregido':'Corrected field'}</span><code>last_received_at</code></p><a class="textlink" href={'https://github.com/frappe/'+prs[6][0]+'/pull/'+prs[6][1]}>Frappe Helpdesk #{prs[6][1]}</a></div> :
+        <ol class="report-steps">{(es?['Evaluación del impacto','Reporte a la organización','Escalado a INCIBE-CERT']:['Impact assessment','Report to the organization','Escalation to INCIBE-CERT']).map(step=><li>{step}</li>)}</ol>}
+      <figcaption>{kind&&<b>{es?'Arquitectura simplificada':'Simplified architecture'} · </b>}{feature.caption}</figcaption>
+    </figure>
+    <div class="case-decision"><p class="eyebrow">{es?'Decisión técnica':'Engineering decision'}</p><h2>{feature.decision}</h2><p>{feature.explanation}</p>{proof&&<a class="textlink" href={'https://github.com/frappe/'+proof[0]+'/pull/'+proof[1]}>{es?'Ver corrección':'View fix'} · {proof[0]} #{proof[1]}</a>}</div>
+  </div>
+</section>
