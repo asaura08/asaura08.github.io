@@ -33,7 +33,7 @@ I built images, adapted components for Ubuntu 24.04 and integrated the agents wi
 
 ## Production outcome
 
-The platform provisioned and hosted Frappe applications in production. It served one paying customer during that period at MetaZenIT.
+The platform provisioned and hosted Frappe applications in production. It served some paying customers during that period at MetaZenIT.
 
 ## What I learned
 
