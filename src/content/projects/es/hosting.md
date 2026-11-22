@@ -1,9 +1,9 @@
 ---
 title: "Plataforma SaaS de hosting y aprovisionamiento automático"
 shortTitle: "Hosting y aprovisionamiento SaaS"
-summary: "Adapté Frappe Press y Agent para desplegar aplicaciones desde un panel de autoservicio. La plataforma llegó a producción y atendió a un cliente de pago."
+summary: "Adapté Frappe Press y Agent para desplegar aplicaciones desde un panel de autoservicio. La plataforma llegó a producción y atendió a clientes de pago."
 feature:
-  signal: "1 cliente de pago"
+  signal: "Clientes en producción"
   context: "Hosting Frappe en producción durante mi etapa en MetaZenIT."
   figureTitle: "Del alta de un sitio a su dominio"
   caption: "Press coordinaba el alta. Agent preparaba el entorno remoto. El proxy, DNS y TLS hacían accesible la aplicación."
@@ -33,8 +33,8 @@ Construí imágenes, adapté componentes a Ubuntu 24.04 e integré los agentes c
 
 ## Resultado en producción
 
-La plataforma llegó a aprovisionar y alojar aplicaciones Frappe en producción. Durante esa etapa de MetaZenIT, un cliente pagó por el servicio.
+La plataforma llegó a aprovisionar y alojar aplicaciones Frappe en producción. Durante esa etapa de MetaZenIT, los clientes pagaron por el servicio.
 
 ## Qué aprendí
 
-Seguir un alta desde el panel hasta el dominio me ayudó a acotar cada incidencia. El estado del sitio, la operación del agente y la configuración del proxy responden a preguntas distintas sobre un mismo despliegue.
+Seguir un alta desde el panel hasta el dominio me ayudó a acotar cada incidencia. El estado del sitio, la operación del agente y la configuración del proxy responden a preguntas distintas sobre un mismo despliegue. Automatización del cliclo de ventas de un SaaS.
